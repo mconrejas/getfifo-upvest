@@ -14,12 +14,12 @@ app.get('/assets', function (req, res) {
 
     // Log the result to the console.
     return listAssets({ cursor, pageSize }).then(data => { 
-        console.log('Request complete.'),
+        console.log('URL: /assets'),
         res.json(data)
     });
 })
 
-app.get('/register', function (req, res) {
+app.post('/register', function (req, res) {
     // Lazily import user registration function.
     const { registerUser } = require("./src/commands/registerUser");
     
@@ -29,12 +29,12 @@ app.get('/register', function (req, res) {
 
     // Log the result to the console.
     registerUser({ username, password }).then(data => {
-        console.log(`Request complete.`),
+        console.log(`URL: /register`),
         res.json(data)
     });
 })
 
-app.get('/getaccesstoken', function (req, res) {
+app.post('/getaccesstoken', function (req, res) {
     // Extract args from querystring.
     const username = req.query.username;
     const password = req.query.password
@@ -44,12 +44,12 @@ app.get('/getaccesstoken', function (req, res) {
 
     // Log the result to the console.
     obtainAccessToken({ username, password }).then(data => {
-        console.log(`Request complete.`),
+        console.log(`URL: /getaccesstoken`),
         res.json(data)
     });
 })
 
-app.get('/adduserwallet', function (req, res) {
+app.post('/adduserwallet', function (req, res) {
     // Extract args from querystring.
     const accessToken = req.query.accesstoken;
     const password = req.query.password;
@@ -60,7 +60,7 @@ app.get('/adduserwallet', function (req, res) {
 
     // Log the result to the console.
     addWallet({ accessToken, password, assetId }).then(data => {
-        console.log(`Request complete.`),
+        console.log(`URL: /adduserwallet`),
         res.json(data)
     });
 })
@@ -74,7 +74,7 @@ app.get('/listwallets', function (req, res) {
 
     // Log the result to the console.
     listWallets({ accessToken }).then(data => {
-        console.log(`Request complete.`),
+        console.log(`URL: /listwallets`),
         res.json(data)
     });
 })
@@ -89,12 +89,12 @@ app.get('/getwalletbyid', function (req, res) {
 
     // Log the result to the console.
     getWalletById({ accessToken, id }).then(data => {
-        console.log(`Request complete.`),
+        console.log(`URL: /getwalletbyid`),
         res.json(data)
     });
 })
 
-app.get('/send', function (req, res) {
+app.post('/send', function (req, res) {
     // Extract args from querystring.
     const accessToken = req.query.accesstoken;
     const password = req.query.password;
@@ -108,7 +108,7 @@ app.get('/send', function (req, res) {
 
     // Log the result to the console.
     conductTransaction({ accessToken, password, walletId, assetId, amount, fee, recipient }).then(data => {
-        console.log(`Request complete.`),
+        console.log(`URL: /send`),
         res.json(data)
     });
 })
