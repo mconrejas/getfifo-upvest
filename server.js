@@ -4,37 +4,51 @@ const express = require('express')
 const app = express()
 const port = 3080
 
-app.get('/assets', function (req, res) {
+app.get('/api/listassets', function (req, res) {
     // Extract cursor and pageSize from querystring.
     let cursor = req.query.cursor;
-    let pageSize = req.query.size;
+    let page_size = req.query.page_size;
 
     // Lazily import the assets-listing function.
     const { listAssets } = require("./src/commands/listAssets");
 
     // Log the result to the console.
-    return listAssets({ cursor, pageSize }).then(data => { 
+    return listAssets({ cursor, page_size }).then(data => { 
         console.log('URL: /assets'),
         res.json(data)
     });
 })
 
-app.post('/register', function (req, res) {
+app.get('/api/getasset', function (req, res) {
+    // Extract args from querystring.
+    const assetId = req.query.asset_id;
+
+    // Lazily import access token acquisition function.
+    const { getAsset } = require("./src/commands/getAsset");
+
+    // Log the result to the console.
+    getAsset({ assetId }).then(data => {
+        console.log(`URL: /getasset`),
+            res.json(data)
+    });
+})
+
+app.post('/api/register', function (req, res) {
     // Lazily import user registration function.
     const { registerUser } = require("./src/commands/registerUser");
     
     // Extract args from querystring.
     const username = req.query.username;
-    const password = req.query.password 
+    const password = req.query.password;
 
     // Log the result to the console.
     registerUser({ username, password }).then(data => {
-        console.log(`URL: /register`),
+        console.log(`URL: /register\n\rDATA: ['username':${username}, 'password':${password}]`),
         res.json(data)
     });
 })
 
-app.post('/getaccesstoken', function (req, res) {
+app.post('/api/getaccesstoken', function (req, res) {
     // Extract args from querystring.
     const username = req.query.username;
     const password = req.query.password
@@ -49,11 +63,11 @@ app.post('/getaccesstoken', function (req, res) {
     });
 })
 
-app.post('/adduserwallet', function (req, res) {
+app.post('/api/adduserwallet', function (req, res) {
     // Extract args from querystring.
     const accessToken = req.query.accesstoken;
     const password = req.query.password;
-    const assetId = req.query.assetid;
+    const assetId = req.query.asset_id;
 
     // Lazily import access token acquisition function.
     const { addWallet } = require("./src/commands/addWallet");
@@ -65,7 +79,7 @@ app.post('/adduserwallet', function (req, res) {
     });
 })
 
-app.get('/listwallets', function (req, res) {
+app.get('/api/listwallets', function (req, res) {
     // Extract args from querystring.
     const accessToken = req.query.accesstoken;
 
@@ -79,35 +93,35 @@ app.get('/listwallets', function (req, res) {
     });
 })
 
-app.get('/getwalletbyid', function (req, res) {
+app.get('/api/getwallet', function (req, res) {
     // Extract args from querystring.
     const accessToken = req.query.accesstoken;
-    const id = req.query.id;
+    const assetId = req.query.assetid;
 
     // Lazily import access token acquisition function.
-    const { getWalletById } = require("./src/commands/getWalletById");
+    const { getWallet } = require("./src/commands/getWallet");
 
     // Log the result to the console.
-    getWalletById({ accessToken, id }).then(data => {
-        console.log(`URL: /getwalletbyid`),
+    getWallet({ accessToken, assetId }).then(data => {
+        console.log(`URL: /getwallet`),
         res.json(data)
     });
 })
 
-app.post('/send', function (req, res) {
+app.post('/api/transact', function (req, res) {
     // Extract args from querystring.
     const accessToken = req.query.accesstoken;
     const password = req.query.password;
-    const assetId = req.query.assetid;
+    const walletId = req.query.walletid;
     const amount = req.query.amount;
     const fee = req.query.fee;
-    const recipient = req.query.recipient;
+    const address = req.query.address;
 
     // Lazily import access token acquisition function.
     const { conductTransaction } = require("./src/commands/conductTransaction");
 
     // Log the result to the console.
-    conductTransaction({ accessToken, password, walletId, assetId, amount, fee, recipient }).then(data => {
+    conductTransaction({ accessToken, password, walletId, amount, fee, address }).then(data => {
         console.log(`URL: /send`),
         res.json(data)
     });
