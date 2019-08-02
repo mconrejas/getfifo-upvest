@@ -2,13 +2,13 @@ const { API_BASE_URL, API_VERSION } = require("../../config");
 const { axiosAdapter } = require("../axiosAdapter");
 
 const MESSAGE_HEADER_CONTENT_TYPE = "application/json";
-const GET_WALLET_BY_ID_PATH = `/${API_VERSION}/kms/wallets/`;
-const RESOURCE_URL = `${API_BASE_URL}${GET_WALLET_BY_ID_PATH}`;
+const GET_WALLET_PATH = `/${API_VERSION}/kms/wallets/`;
+const RESOURCE_URL = `${API_BASE_URL}${GET_WALLET_PATH}`;
 const REQUEST_METHOD = "GET";
 
-async function getWalletById({ accessToken, id }) {
+async function getWallet({ accessToken, walletId }) {
     // Assemble path with uri-encoded query parameters.
-    const resourceUrl = `${RESOURCE_URL}${id}`;
+    const resourceUrl = `${RESOURCE_URL}${walletId}`;
     // Generate the request headers list.
     const headers = {
         Authorization: `Bearer ${accessToken}`,
@@ -27,4 +27,4 @@ async function getWalletById({ accessToken, id }) {
     });
 }
 
-exports.getWalletById = getWalletById;
+exports.getWallet = getWallet;
