@@ -9,6 +9,7 @@ const REGISTER_USER_CMD = "user:register";
 const DEREGISTER_USER_CMD = "user:deregister";
 const OBTAIN_ACCESS_TOKEN_CMD = "auth:token";
 const LIST_ASSETS_CMD = "assets";
+const GET_ASSETS_CMD = "asset";
 const ADD_WALLET_CMD = "wallet:add";
 const LIST_WALLETS_CMD = "wallets";
 const GET_WALLET_WITH_ID_CMD = "wallet";
@@ -32,7 +33,7 @@ module.exports = () => {
     switch (command) {
         case ECHO_MESSAGE_CMD: {
             // Lazily import echo message function.
-            const { echoMessageUsingGet } = require("./commands/echoMessageUsingGet");
+            const { echoMessageUsingGet } = require("./src/commands/echoMessageUsingGet");
             // Get the message from the arguments passed.
             const message = args._[1];
             // Log the result to the console.
@@ -41,7 +42,7 @@ module.exports = () => {
         }
         case LIST_USERS_CMD: {
             // Lazily import the listing users function.
-            const { listUsers } = require("./commands/listUsers");
+            const { listUsers } = require("./src/commands/listUsers");
             // Get the cursor and page size from the arguments passed.
             const { cursor, page_size: pageSize } = args;
             // Log the result to the console.
@@ -50,7 +51,7 @@ module.exports = () => {
         }
         case REGISTER_USER_CMD: {
             // Lazily import user registration function.
-            const { registerUser } = require("./commands/registerUser");
+            const { registerUser } = require("./src/commands/registerUser");
             // Extract username and password from the passed arguments.
             const { username, password } = args;
             // Log the result to the console.
@@ -59,7 +60,7 @@ module.exports = () => {
         }
         case DEREGISTER_USER_CMD: {
             // Lazily import user deregistration function.
-            const { deregisterUser } = require("./commands/deregisterUser");
+            const { deregisterUser } = require("./src/commands/deregisterUser");
             // Get username from the passed arguments.
             const username = args._[1];
             // Log the result to the console.
@@ -68,7 +69,7 @@ module.exports = () => {
         }
         case OBTAIN_ACCESS_TOKEN_CMD: {
             // Lazily import access token acquisition function.
-            const { obtainAccessToken } = require("./commands/obtainAccessToken");
+            const { obtainAccessToken } = require("./src/commands/obtainAccessToken");
             // Extract username and password from the passed arguments.
             const { username, password } = args;
             // Log the result to the console.
@@ -77,16 +78,25 @@ module.exports = () => {
         }
         case LIST_ASSETS_CMD: {
             // Lazily import the assets-listing function.
-            const { listAssets } = require("./commands/listAssets");
+            const { listAssets } = require("./src/commands/listAssets");
             // Get the cursor and page size from the arguments passed.
             const { cursor, page_size: pageSize } = args;
             // Log the result to the console.
             listAssets({ cursor, pageSize }).then(console.log);
             break;
         }
+        case GET_ASSETS_CMD: {
+            // Lazily import the assets-listing function.
+            const { getAsset } = require("./src/commands/getAsset");
+            // Get the cursor and page size from the arguments passed.
+            const { asset_id: assetId } = args;
+            // Log the result to the console.
+            getAsset({ assetId }).then(console.log);
+            break;
+        }
         case ADD_WALLET_CMD: {
             // Lazily import the wallet adding function.
-            const { addWallet } = require("./commands/addWallet");
+            const { addWallet } = require("./src/commands/addWallet");
             // Get the access token, password, and asset ID from the arguments passed.
             const { access_token: accessToken, password, asset_id: assetId } = args;
             // Log the result to the console.
@@ -97,28 +107,25 @@ module.exports = () => {
             // Get the access token, cursor, and page size from the arguments passed.
             const { access_token: accessToken, cursor, page_size: pageSize } = args;
 
-            // Check if an access token is provided.
-            if (accessToken) {
-                // Lazily import the wallet-for-user-listing function.
-                const { listWalletsForUser } = require("./commands/listWalletsForUser");
-                // Log the result to the console.
-                listWalletsForUser({ accessToken, cursor, pageSize }).then(console.log);
-            }
+            // Lazily import the wallet-for-user-listing function.
+            const { listWallets } = require("./src/commands/listWallets");
+            // Log the result to the console.
+            listWallets({ accessToken, cursor, pageSize }).then(console.log);
 
             break;
         }
         case GET_WALLET_WITH_ID_CMD: {
             // Lazily import the wallet-with-id function.
-            const { getWalletWithId } = require("./commands/getWalletWithId");
+            const { getWallet } = require("./src/commands/getWallet");
             // Get the cursor and page size from the arguments passed.
             const { access_token: accessToken, id } = args;
             // Log the result to the console.
-            getWalletWithId({ accessToken, id }).then(console.log);
+            getWallet({ accessToken, id }).then(console.log);
             break;
         }
         case CONDUCT_TRANSACTION_CMD: {
             // Lazily import the wallet adding function.
-            const { conductTransaction } = require("./commands/conductTransaction");
+            const { conductTransaction } = require("./src/commands/conductTransaction");
             // Get the access token, password, and asset ID from the arguments passed.
             const {
                 access_token: accessToken,
