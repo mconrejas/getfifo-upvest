@@ -122,25 +122,35 @@ app.get('/api/getwallet', function (req, res) {
     // Log the result to the console.
     getWallet({ accessToken, assetId }).then(data => {
         console.log(`URL: /getwallet`),
+            console.log(data),
         res.json(data)
     });
 })
 
 app.post('/api/transact', function (req, res) {
+    // Lazily import the wallet adding function.
+    const { conductTransaction } = require("./src/commands/conductTransaction");
+    
     // Extract args from querystring.
-    const accessToken = req.query.accesstoken;
+    const accessToken = req.query.access_token;
     const password = req.query.password;
-    const walletId = req.query.walletid;
+    const walletId = req.query.wallet_id;
+    const assetId = req.query.asset_id;
     const amount = req.query.amount;
     const fee = req.query.fee;
-    const address = req.query.address;
-
-    // Lazily import access token acquisition function.
-    const { conductTransaction } = require("./src/commands/conductTransaction");
-
+    const recipient = req.query.address;
+    
     // Log the result to the console.
-    conductTransaction({ accessToken, password, walletId, amount, fee, address }).then(data => {
+    conductTransaction({
+        accessToken,
+        password,
+        walletId,
+        assetId,
+        amount,
+        fee,
+        recipient }).then(data => {
         console.log(`URL: /send`),
+        console.log(data),
         res.json(data)
     });
 })
