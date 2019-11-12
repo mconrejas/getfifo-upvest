@@ -4,15 +4,16 @@ const minimist = require("minimist");
 const INTERPRETER_AND_FILE_ARGS_LENGTH = 2;
 
 const ECHO_MESSAGE_CMD = "echo";
-const LIST_USERS_CMD = "users";
+const LIST_USERS_CMD = "user:list";
 const REGISTER_USER_CMD = "user:register";
+const GET_USER_CMD = "user:get";
 const DEREGISTER_USER_CMD = "user:deregister";
-const OBTAIN_ACCESS_TOKEN_CMD = "auth:token";
-const LIST_ASSETS_CMD = "assets";
-const GET_ASSETS_CMD = "asset";
+const OBTAIN_ACCESS_TOKEN_CMD = "user:token";
+const LIST_ASSETS_CMD = "asset:list";
+const GET_ASSETS_CMD = "asset:get";
 const ADD_WALLET_CMD = "wallet:add";
-const LIST_WALLETS_CMD = "wallets";
-const GET_WALLET_WITH_ID_CMD = "wallet";
+const LIST_WALLETS_CMD = "wallet:list";
+const GET_WALLET_WITH_ID_CMD = "wallet:get";
 const CONDUCT_TRANSACTION_CMD = "tx:conduct";
 
 /* List of conduct transaction arguments to be always treated as strings.
@@ -58,11 +59,20 @@ module.exports = () => {
             registerUser({ username, password }).then(console.log);
             break;
         }
+        case GET_USER_CMD: {
+            // Lazily import user deregistration function.
+            const { getUser } = require("./src/commands/getUser");
+            // Get username from the passed arguments.
+            const { username } = args;
+            // Log the result to the console.
+            getUser({ username }).then(console.log);
+            break;
+        }
         case DEREGISTER_USER_CMD: {
             // Lazily import user deregistration function.
             const { deregisterUser } = require("./src/commands/deregisterUser");
             // Get username from the passed arguments.
-            const username = args._[1];
+            const { username } = args;
             // Log the result to the console.
             deregisterUser({ username }).then(console.log);
             break;
@@ -72,6 +82,7 @@ module.exports = () => {
             const { obtainAccessToken } = require("./src/commands/obtainAccessToken");
             // Extract username and password from the passed arguments.
             const { username, password } = args;
+            
             // Log the result to the console.
             obtainAccessToken({ username, password }).then(console.log);
             break;
@@ -118,9 +129,9 @@ module.exports = () => {
             // Lazily import the wallet-with-id function.
             const { getWallet } = require("./src/commands/getWallet");
             // Get the cursor and page size from the arguments passed.
-            const { access_token: accessToken, id } = args;
+            const { access_token: accessToken, id: walletId } = args;
             // Log the result to the console.
-            getWallet({ accessToken, id }).then(console.log);
+            getWallet({ accessToken, walletId }).then(console.log);
             break;
         }
         case CONDUCT_TRANSACTION_CMD: {
@@ -129,12 +140,12 @@ module.exports = () => {
             // Get the access token, password, and asset ID from the arguments passed.
             const {
                 access_token: accessToken,
-                password,
+                password: password,
                 wallet_id: walletId,
                 asset_id: assetId,
-                amount,
-                fee,
-                recipient
+                amount: amount,
+                fee: fee,
+                wallet_address: recipient
             } = args;
             // Log the result to the console.
             conductTransaction({
