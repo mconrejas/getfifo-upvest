@@ -15,6 +15,7 @@ app.get('/api/listassets', function (req, res) {
     // Log the result to the console.
     return listAssets({ cursor, page_size }).then(data => { 
         console.log('URL: /assets'),
+            console.log(data),
         res.json(data)
     });
 })
@@ -29,6 +30,7 @@ app.get('/api/getasset', function (req, res) {
     // Log the result to the console.
     getAsset({ assetId }).then(data => {
         console.log(`URL: /getasset`),
+            console.log(data),
             res.json(data)
     });
 })
@@ -77,6 +79,7 @@ app.post('/api/getaccesstoken', function (req, res) {
     // Log the result to the console.
     obtainAccessToken({ username, password }).then(data => {
         console.log(`URL: /getaccesstoken`),
+            console.log(data),
         res.json(data)
     });
 })
@@ -93,6 +96,7 @@ app.post('/api/adduserwallet', function (req, res) {
     // Log the result to the console.
     addWallet({ accessToken, password, assetId }).then(data => {
         console.log(`URL: /adduserwallet`),
+            console.log(data),
         res.json(data)
     });
 })
@@ -107,6 +111,7 @@ app.get('/api/listwallets', function (req, res) {
     // Log the result to the console.
     listWallets({ accessToken }).then(data => {
         console.log(`URL: /listwallets`),
+            console.log(data),
         res.json(data)
     });
 })
