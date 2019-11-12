@@ -9,6 +9,7 @@ const REQUEST_METHOD = "GET";
 async function getWallet({ accessToken, walletId }) {
     // Assemble path with uri-encoded query parameters.
     const resourceUrl = `${RESOURCE_URL}${walletId}`;
+
     // Generate the request headers list.
     const headers = {
         Authorization: `Bearer ${accessToken}`,
