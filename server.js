@@ -2,7 +2,7 @@
 
 const express = require('express')
 const app = express()
-const port = 3080
+const port = 3081
 
 app.get('/api/listassets', function (req, res) {
     // Extract cursor and pageSize from querystring.
