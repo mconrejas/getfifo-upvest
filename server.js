@@ -44,9 +44,27 @@ app.post('/api/register', function (req, res) {
     // Log the result to the console.
     registerUser({ username, password }).then(data => {
         console.log(`URL: /register\n\rDATA: ['username':${username}, 'password':${password}]`),
+        console.log(data),
         res.json(data)
     });
 })
+
+app.post('/api/unregister', function (req, res) {
+    // Lazily import user registration function.
+    const { deregisterUser } = require("./src/commands/deregisterUser");
+
+    // Extract args from querystring.
+    const username = req.query.username;
+
+    // Log the result to the console.
+    deregisterUser({ username }).then(data => {
+        console.log(`URL: /register\n\rDATA: ['username':${username}]`),
+        console.log(data),
+        res.json(data)
+    });
+})
+
+app.post('/api/')
 
 app.post('/api/getaccesstoken', function (req, res) {
     // Extract args from querystring.
