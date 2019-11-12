@@ -15,13 +15,13 @@ async function conductTransaction({
 }) {
     // Assign payload body with username and password.
     const payloadBody = {
-        password,
-        wallet_id: walletId,
+        password: password,
         asset_id: assetId,
-        quantity: amount, // 0.1 ETH * 10^18 = 100000000000000000
-        fee, // 0.0013 ETH * 10^18 = 1300000000000000
-        recipient
+        quantity: `${((amount * 10) * 100000000000000000)}`, // 0.1 ETH * 10^18 = 100000000000000000
+        fee: `${((fee * 10) * 100000000000000000)}`, // 0.0013 ETH * 10^18 = 1300000000000000
+        recipient: recipient
     };
+
     // Write payload body as string.
     const messageBody = JSON.stringify(payloadBody);
     // Generate the request headers list.
@@ -30,8 +30,8 @@ async function conductTransaction({
         "Content-Type": MESSAGE_HEADER_CONTENT_TYPE
     };
     // Assemble configuration for axios.
-    const TX_PATH = `/wallets/${walletId}/transactions/`;
-    const RESOURCE_URL = `${API_BASE_URL}${API_VERSION}${TX_PATH}`;
+    const TX_PATH = `kms/wallets/${walletId}/transactions/`;
+    const RESOURCE_URL = `${API_BASE_URL}/${API_VERSION}/${TX_PATH}`;
     const axiosConfig = {
         method: REQUEST_METHOD,
         url: RESOURCE_URL,
@@ -40,7 +40,9 @@ async function conductTransaction({
     };
 
     // Asynchronously return the result of the call to the API.
-    return await axiosAdapter(axiosConfig);
+    return await axiosAdapter(axiosConfig).then(response => {
+        return response;
+    });
 }
 
 exports.conductTransaction = conductTransaction;
