@@ -17,10 +17,12 @@ async function conductTransaction({
     const payloadBody = {
         password: password,
         asset_id: assetId,
-        quantity: `${((amount * 10) * 100000000000000000)}`, // 0.1 ETH * 10^18 = 100000000000000000
-        fee: `${((fee * 10) * 100000000000000000)}`, // 0.0013 ETH * 10^18 = 1300000000000000
+        quantity: `${amount}`, // 0.1 ETH * 10^18 = 1000000000000000000
+        fee: `${fee}`, // 0.0013 ETH * 10^18 = 1300000000000000
         recipient: recipient
     };
+
+    //1500000000000000000
 
     // Write payload body as string.
     const messageBody = JSON.stringify(payloadBody);
@@ -38,6 +40,8 @@ async function conductTransaction({
         headers,
         data: messageBody
     };
+
+    console.log(axiosConfig);
 
     // Asynchronously return the result of the call to the API.
     return await axiosAdapter(axiosConfig).then(response => {
