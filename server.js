@@ -60,13 +60,13 @@ app.post('/api/unregister', function (req, res) {
 
     // Log the result to the console.
     deregisterUser({ username }).then(data => {
-        console.log(`URL: /register\n\rDATA: ['username':${username}]`),
+        console.log(`URL: /unregister\n\rDATA: ['username':${username}]`),
         console.log(data),
         res.json(data)
     });
 })
 
-app.post('/api/')
+// app.post('/api/')
 
 app.post('/api/getaccesstoken', function (req, res) {
     // Extract args from querystring.
